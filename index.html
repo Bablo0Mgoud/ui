@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>صفحة مرعبة متوهجة</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://i.imgur.com/EZQidmC.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Courier New', Courier, monospace;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+    .image-container img {
+      width: 750px;
+      height: auto;
+      border: 2px solid #ff0000;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 255, 0.7);
+    }
+    .info, .text {
+      color: #ffffff;
+      letter-spacing: 4.5px;
+      white-space: pre-wrap;
+      text-shadow:
+        0 0 10px #ffffff,
+        0 0 20px #ff0000,
+        0 0 40px #ff0000,
+        0 0 80px #ff0000,
+        0 0 120px #ff0000;
+    }
+    .text {
+      margin-top: 20px;
+      font-size: 3em;
+      text-shadow:
+        0 0 15px #ffffff,
+        0 0 30px #ff0000,
+        0 0 60px #ff0000,
+        0 0 90px #ff0000,
+        0 0 120px #ff0000;
+    }
+    .info {
+      margin-top: 20px;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="image-container">
+    <img src="https://i.pinimg.com/originals/92/23/43/9223430d43fda43bb37acadaa424e767.gif" alt="صورة مخيفة">
+  </div>
+
+  <!-- الصوت المحلي -->
+  <audio id="bg-music" autoplay loop muted>
+    <source src="6669.wav" type="audio/wav">
+    المتصفح لا يدعم تشغيل الصوت
+  </audio>
+
+  <div class="text">قدها؟ اجل لف واهرب من نارها</div>
+
+  <div class="info" id="ip-info">
+    <strong>IP:</strong> <span id="ip"></span><br>
+    <strong>City:</strong> <span id="city"></span><br>
+    <strong>Region:</strong> <span id="region"></span><br>
+    <strong>Country:</strong> <span id="country"></span><br>
+    <strong>Location:</strong> <span id="loc"></span><br>
+    <strong>Org:</strong> <span id="org"></span><br>
+    <strong>Timezone:</strong> <span id="timezone"></span>
+  </div>
+
+  <div class="text">By Group sadean #6669 - discord.gg/X88gbfeqsC</div>
+
+  <script>
+    const audio = document.getElementById("bg-music");
+
+    // فورس تشغيل الصوت بمجرد تحميل الصفحة
+    function forcePlay() {
+      audio.muted = false;
+      audio.play().then(() => {
+        console.log("الصوت يشتغل ✅");
+      }).catch(err => {
+        console.log("المتصفح حاول يمنع، نحاول ثاني...");
+        setTimeout(forcePlay, 1000); // يعيد المحاولة كل ثانية
+      });
+    }
+
+    window.addEventListener("load", forcePlay);
+
+    // جلب معلومات IP
+    fetch('https://ipinfo.io/json')
+      .then(res => res.json())
+      .then(data => {
+        delete data.readme;
+        const info = document.getElementById('ip-info');
+        info.innerHTML = Object.entries(data)
+          .map(([k, v]) => '<strong>' + k.charAt(0).toUpperCase() + k.slice(1) + ':</strong> ' + v)
+          .join('<br>');
+      })
+      .catch(err => {
+        console.error('لا يمكن جلب بيانات الـ IP:', err);
+        document.getElementById('ip-info').textContent = 'فشل في جلب بيانات IP';
+      });
+  </script>
+</body>
+</html>
